@@ -10,12 +10,12 @@ const userData = {
         mobile_number: 9826684906,
         name: "jay",
         profile_image: null
-    },
-    
+    }
 }
 
 
 export function Reducer1(state = initialState, action){
+    console.log(action)
     switch(action.type){
         case "ATHANTICATION": 
             return {...state, userAthantication: action.payload.no};
@@ -25,6 +25,7 @@ export function Reducer1(state = initialState, action){
 }
 
 export function Reducer2(state = userData, action){
+    console.log(action)
     switch(action.type){
         case "LOGINUSERDATA": 
             return {...state, data: action.payload.data};

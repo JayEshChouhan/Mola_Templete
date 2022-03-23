@@ -1,6 +1,5 @@
-import Header from '../Components/header';
 import Products from './product/products';
-import Footer from "./footer";
+import { Col, Container, Row } from 'react-bootstrap';
 
 export default function Home(prop) {
   return (
@@ -31,43 +30,40 @@ export default function Home(prop) {
               <p class="heading-cat">trending brands</p>
             </div>
           </div>
-          {/* <OwlCarousel className='owl-simple' dots={false} loop items={6} margin={10} nav>
-            <div class='item '>
-              <a href="#" class="brand">
-                <img src="images/1.png" alt="Brand Name" />
-              </a>
-            </div>
-            <div class='item'>
-              <a href="#" class="brand">
-                <img src="images/2.png" alt="Brand Name" />
-              </a>
-            </div>
-            <div class='item'>
-              <a href="#" class="brand">
-                <img src="images/3.png" alt="Brand Name" />
-              </a>
-            </div>
-            <div class='item'>
-              <a href="#" class="brand">
-                <img src="images/4.png" alt="Brand Name" />
-              </a>
-            </div>
-            <div class='item'>
-              <a href="#" class="brand">
-                <img src="images/5.png" alt="Brand Name" />
-              </a>
-            </div>
-            <div class='item'>
-              <a href="#" class="brand">
-                <img src="images/6.png" alt="Brand Name" />
-              </a>
-            </div>
-            <div class='item'>
-              <a href="#" class="brand">
-                <img src="images/1.png" alt="Brand Name" />
-              </a>
-            </div>
-          </OwlCarousel> */}
+          <Container>
+            <Row>
+              <Col lg={2}>
+                <a href="#" class="brand">
+                  <img src="images/1.png" alt="Brand Name" />
+                </a>
+              </Col>
+              <Col lg={2}>
+                <a href="#" class="brand">
+                  <img src="images/2.png" alt="Brand Name" />
+                </a>
+              </Col>
+              <Col lg={2}>
+                <a href="#" class="brand">
+                  <img src="images/3.png" alt="Brand Name" />
+                </a>
+              </Col>
+              <Col lg={2}>
+                <a href="#" class="brand">
+                  <img src="images/4.png" alt="Brand Name" />
+                </a>
+              </Col>
+              <Col lg={2}>
+                <a href="#" class="brand">
+                  <img src="images/5.png" alt="Brand Name" />
+                </a>
+              </Col>
+              <Col lg={2}>
+                <a href="#" class="brand">
+                  <img src="images/6.png" alt="Brand Name" />
+                </a>
+              </Col>
+            </Row>
+          </Container>
         </section>
         <section className="best-sellers">
           <div className='container'>

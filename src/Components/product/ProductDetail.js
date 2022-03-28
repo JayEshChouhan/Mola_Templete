@@ -6,6 +6,7 @@ import { ProductSingleGetApi } from "../../api/product/product";
 import { Addtocard } from "../../api/product/card";
 import { TailSpin } from  'react-loader-spinner'
 import Mybreadcrumb from "../breadcrumb";
+import Img from "../../layout/img";
 const base_url = 'http://127.0.0.1:8000';
 
 function ProductDetail(prop) {
@@ -101,7 +102,7 @@ function ProductDetail(prop) {
                                     <div className="product-details-action">
                                         <div className="details-action-col">
                                             <div className="product-details-quantity">
-                                                <input type="number" min="1" max="10" step="1" value="1"/>
+                                                <input type="number" min="1" max="10" step="1" />
                                             </div>
                                             <a 
                                                 href="javascript:;" 
@@ -144,6 +145,47 @@ function ProductDetail(prop) {
                     </div>
                 </>
             )}
+               <section className="logos">
+          <div class="container">
+            <div class="heading">
+              <p class="heading-cat">trending brands</p>
+            </div>
+          </div>
+          <Container>
+            <Row>
+              <Col lg={2}>
+                <a href="#" class="brand">
+                    <Img src="images/1.png" alt="Brand Name"/>
+                </a>
+              </Col>
+              <Col lg={2}>
+                <a href="#" class="brand">
+                    <Img src="images/2.png" alt="Brand Name"/>
+                </a>
+              </Col>
+              <Col lg={2}>
+                <a href="#" class="brand">
+                    <Img src="images/3.png" alt="Brand Name"/>
+                </a>
+              </Col>
+              <Col lg={2}>
+                <a href="#" class="brand">
+                  <Img src="images/4.png" alt="Brand Name" />
+                </a>
+              </Col>
+              <Col lg={2}>
+                <a href="#" class="brand">
+                  <Img src="images/5.png" alt="Brand Name" />
+                </a>
+              </Col>
+              <Col lg={2}>
+                <a href="#" class="brand">
+                  <Img src="images/6.png" alt="Brand Name" />
+                </a>
+              </Col>
+            </Row>
+          </Container>
+        </section>
         </div>
     )
 }

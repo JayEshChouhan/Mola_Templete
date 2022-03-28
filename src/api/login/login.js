@@ -1,11 +1,13 @@
 import { runGetApi, runPostApi } from "../api";
-import { SetAccessToken } from "../base";
+import { SetAccessToken, SetRefreshToken } from "../base";
 
 export async function LoginApi(data) {
     const result = await runPostApi("api/token/", data);
     let AuthStr = result.data.access;
+    let refresh = result.data.refresh;
     console.log(AuthStr);
     SetAccessToken(AuthStr)
+    SetRefreshToken(refresh)
     return result;
 }
 

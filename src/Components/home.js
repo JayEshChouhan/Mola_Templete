@@ -1,5 +1,6 @@
 import Products from './product/products';
 import { Col, Container, Row } from 'react-bootstrap';
+import Img from '../layout/img';
 
 export default function Home(prop) {
   return (
@@ -34,32 +35,32 @@ export default function Home(prop) {
             <Row>
               <Col lg={2}>
                 <a href="#" class="brand">
-                  <img src="images/1.png" alt="Brand Name" />
+                    <Img src="images/1.png" alt="Brand Name"/>
                 </a>
               </Col>
               <Col lg={2}>
                 <a href="#" class="brand">
-                  <img src="images/2.png" alt="Brand Name" />
+                    <Img src="images/2.png" alt="Brand Name"/>
                 </a>
               </Col>
               <Col lg={2}>
                 <a href="#" class="brand">
-                  <img src="images/3.png" alt="Brand Name" />
+                    <Img src="images/3.png" alt="Brand Name"/>
                 </a>
               </Col>
               <Col lg={2}>
                 <a href="#" class="brand">
-                  <img src="images/4.png" alt="Brand Name" />
+                  <Img src="images/4.png" alt="Brand Name" />
                 </a>
               </Col>
               <Col lg={2}>
                 <a href="#" class="brand">
-                  <img src="images/5.png" alt="Brand Name" />
+                  <Img src="images/5.png" alt="Brand Name" />
                 </a>
               </Col>
               <Col lg={2}>
                 <a href="#" class="brand">
-                  <img src="images/6.png" alt="Brand Name" />
+                  <Img src="images/6.png" alt="Brand Name" />
                 </a>
               </Col>
             </Row>

@@ -28,9 +28,9 @@ export default function Login(prop){
 		const login = await LoginApi(item);
 		if(login.status){
 			toast.success("Login Successfully");
-			var auth = login.status;
-			console.log(auth);
-			const userData = await LoginUserApi(auth);
+			// var auth = login.status;
+			// console.log(auth);
+			const userData = await LoginUserApi();
 			console.log(userData);
 			dispatch({type: "ATHANTICATION" ,payload: {no:login.status}});
 			dispatch({type: "LOGINUSERDATA" ,payload: {data:userData.data}});
@@ -38,9 +38,9 @@ export default function Login(prop){
 		}else{
 			if(!login.data.status){
 				if (login.data.email){
-					toast.error("Email "+login.data.email[0]);
+					toast.error("Email :"+login.data.email[0]);
 				} else if (login.data.password){
-					toast.error("Password "+login.data.password[0]);
+					toast.error("Password :"+login.data.password[0]);
 				} else{
 					toast.error(login.data.detail);
 				}

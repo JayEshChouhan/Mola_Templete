@@ -1,5 +1,6 @@
 import React from "react";
 import { Col, Container, Row } from "react-bootstrap";
+import Img from "../layout/img";
 
 export default function Footer(prop) {
     return(
@@ -62,7 +63,7 @@ export default function Footer(prop) {
             		<Row>
                         <Col lg={3} md={12}>
                             <div className="widget widget-about">
-                            	<img src={prop.sideLogo || "images/logo.png"} className="footer-logo" alt="Footer Logo" width="110" height="25"/>
+                            	<Img src={prop.sideLogo || "images/logo.png"} className="footer-logo" alt="Footer Logo" width="110" height="25"/>
 		                        <p>Praesent dapibus, neque id cursus ucibus, tortor  neque egestas augue, eu vulputate magna eros eu erat. </p>
 		                        
 		                        <div className="social-icons">
@@ -122,7 +123,7 @@ export default function Footer(prop) {
                     <p className="footer-copyright">Copyright © 2019 Molla Store. All Rights Reserved.</p>
 
                         <figure className="footer-payments">
-                            <img src="images/payments.png" alt="Payment methods" width="272" height="20" />
+                            <Img src="images/payments.png" alt="Payment methods" width="272" height="20" />
                         </figure>
                      
                     </div>

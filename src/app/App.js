@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import './App.css';
 import { BrowserRouter as Router, Routes, Route} from "react-router-dom";
 import Home from '../Components/home';
@@ -12,8 +12,6 @@ import Header from '../Components/header';
 import Footer from '../Components/footer';
 // import axios from 'axios';
 function App(props) {
-  const [data, setData] = useState({});
-  const [addressData, setAddressData] = useState({});
   return (
     <Provider store={Store}>
       <Router>
@@ -26,7 +24,7 @@ function App(props) {
           <Route exact path="/pages" element={<Home />} />
           <Route exact path="/blog" element={<Home />} />
           <Route exact path="/elements" element={<Home />} />
-          <Route path="/my_account" element={ <Myaccount data={data}/>} />
+          <Route path="/my_account" element={ <Myaccount/>} />
           <Route path="/login" element={ <Login />} />
         </Routes>
         <Footer />

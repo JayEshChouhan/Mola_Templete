@@ -1,23 +1,33 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { TailSpin } from 'react-loader-spinner'
 import { ProductGetApi } from "../../api/product/product";
-import { Addtocard } from "../../api/product/card";
-const baseUrl = 'http://127.0.0.1:8000';
+import { Addtocard, AddtocardGet } from "../../api/product/card";
+import { FetchCardData, FetchWishlistData, GetAuthDetail } from "../../layout/utils";
+import { useDispatch, useSelector } from "react-redux";
+import { AddToWishlistApi, DeletetoWishlist } from "../../api/product/wishlist";
+import Wishlist from "./wishlist";
+const baseUrl = process.env.REACT_APP_baseUrl;
 // import productsData from "./productsData";
 
 export default function Products(prop) {
+	const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const userAthantication = GetAuthDetail();
   const [productsData, setProductsData] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [cardID, setcardID] = useState();
+  const cardDataList = useSelector(card => card.CartReducer.cardData);
+  const WishlistDataList = useSelector(wishlist => wishlist.WishlistReducer.wishlistData);
+  console.log(WishlistDataList);
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
       try {
         const ProductDetailmain = await ProductGetApi();
         if (ProductDetailmain.statusCode == 200) {
-          setProductsData(ProductDetailmain.data.results)
+          setProductsData(ProductDetailmain.data.results);
+          console.log(productsData);
         }
       } catch (error) {
         console.error(error.message);
@@ -27,13 +37,38 @@ export default function Products(prop) {
     fetchData();
   }, []);
   const AddToCard = async (id) => {
+    var qyt = 1;
+    console.log(cardDataList);
+    cardDataList.data.map((data)=>{
+      if(data.product_id == id){
+        qyt = data.quantity + 1;
+        // console.log(data.quantity+1);
+        console.log(qyt);
+      }
+    })
     const cardData = {
-      "product": id
+      "product": id,
+      "quantity": qyt,
     }
-    
     try {
-      const cardApi = await Addtocard(cardData,true);
-      console.log(cardApi);
+      const cardApi = await Addtocard(cardData,userAthantication);
+      if(cardApi.statusCode===201||cardApi.statusCode===200){
+        FetchCardData(dispatch);
+      }
+    } catch (error) {
+      console.error(error.message);
+    }
+  }
+  const AddToWishlist = async (id) => {
+    const wishlistData = {
+      "product": id,
+    }
+    try {
+      const wishlistApi = await AddToWishlistApi(wishlistData,userAthantication);
+      if(wishlistApi.statusCode===201||wishlistApi.statusCode===200){
+        // FetchCardData(dispatch);
+        FetchWishlistData(dispatch);
+      }
     } catch (error) {
       console.error(error.message);
     }
@@ -60,15 +95,34 @@ export default function Products(prop) {
                       className="btn-cart" 
                       onClick={(event)=> 
                         {
-                          return(
+                          if(userAthantication){
                             AddToCard(product.id)
-                          )
+                          }else{
+                            navigate('/login')
+                          }
                         }
                       }
                       >
                         <span>add to cart</span>
                     </a>
-                    <a href="javascript:;" className="btn-product-icon btn-wishlist"><span>Add to Wishlist</span></a>
+                    {console.log(WishlistDataList)}
+                    {WishlistDataList.length>0?
+                      <Wishlist id={product.id}/>:<a 
+                      href="javascript:;" 
+                      className="btn-product-icon btn-wishlist"
+                      onClick={(event)=> 
+                        {
+                          if(userAthantication){
+                            AddToWishlist(product.id)
+                          }else{
+                            navigate('/login')
+                          }
+                        }
+                      }
+                      >
+                        <span>Add to Wishlist</span>
+                    </a>
+                    }
                   </div>
                   <div className="product-intro">
                     <h3 className="product-title">

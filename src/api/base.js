@@ -1,5 +1,7 @@
+// import { ErrorToast } from "../component/toast/base";
+
 const axios = require("axios").default;
-const baseUrl = 'http://127.0.0.1:8000/';
+const baseUrl = process.env.REACT_APP_baseUrl+"/";
 
 function Response(status, data, status_code) {
   /* respose function to return same resposse objet each time api make a call  */
@@ -29,7 +31,8 @@ export function GetRefreshToken() {
 export async function LogOutAction() {
   localStorage.removeItem("AccessToken");
   localStorage.removeItem("RefreshToken");
-  localStorage.removeItem("UserData");
+  localStorage.removeItem("userData");
+  // window.location.hash = "/";
 }
 
 export async function runApiBase(method, url, data, auth) {
@@ -38,7 +41,7 @@ export async function runApiBase(method, url, data, auth) {
            check if token available in data then run it token
             and add it to headers 
   */
-  var responseStatus = "";
+  var responseStatus = false;
   var ResponseData = "";
   var statusCode = "";
   var obj = "";
@@ -51,14 +54,26 @@ export async function runApiBase(method, url, data, auth) {
     // deleting token object from object
     delete data.token;
   }
+  if (data.token1) {
+    /* Checking if token is avaiable in data or not */
+    data["token"] = data.token1;
+    // deleting token object from object
+    delete data.token1;
+  }
 
   /* Configuarations for runnning API */
   var config = {
     method: method,
     url: baseUrl + url,
     headers: header,
-    data: data,
+    // params: data,
   };
+
+  if (method === "get") {
+    config["params"] = data;
+  } else {
+    config["data"] = data;
+  }
 
   /* Make Api request */
   const response = await axios(config)
@@ -73,22 +88,28 @@ export async function runApiBase(method, url, data, auth) {
       obj = error.response;
     });
 
-  var ResponseData = obj.data;
-  statusCode = obj.request.status;
+  if (obj) {
+    ResponseData = obj.data;
+    statusCode = obj.request.status;
+  } else {
+    ResponseData = {};
+    statusCode = 4000;
+  }
+
   return Response(responseStatus, ResponseData, statusCode);
 }
 
 async function UpdateAccessToken() {
   /* Update the  accessd token from refresh token */
   var token = GetRefreshToken();
-  const GetToken = await runApiBase("get", "api/token/refresh/", {
+  const GetToken = await runApiBase("post", "api/token/refresh/", {
     refresh: token,
   });
   if (GetToken.statusCode === 401) {
     LogOutAction();
     return GetToken;
   } else {
-    // SetAccessToken(GetToken.data.access);
+    SetAccessToken(GetToken.data.access);
     return GetToken.data.access;
   }
 }
@@ -99,10 +120,10 @@ async function checkAndUpdateAccessToken() {
   and if the refresh token is already expired then it prefrom logout 
   */
   var token = GetAccessToken();
-  const CheckToken = await runApiBase("get", "api/token/verify/", {
-    token: token,
+  const CheckToken = await runApiBase("post", "api/token/verify/", {
+    token1: token,
   });
-  if (CheckToken.statusCode !== 401) {
+  if (CheckToken.statusCode === 401) {
     const UpdateToken = await UpdateAccessToken();
     return UpdateToken;
   }
@@ -122,5 +143,8 @@ export async function runApi(method, url, data, auth = false) {
     data["token"] = GetAccessToken();
   }
   const Result = await runApiBase(method, url, data, auth);
+  if (Result.statusCode === 4000) {
+    // ErrorToast("Server down please try after some time ");
+  }
   return Result;
 }

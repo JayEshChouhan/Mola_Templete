@@ -1,24 +1,30 @@
-import React, { useEffect } from 'react';
-import { useSelector } from 'react-redux';
+import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { Link,NavLink } from "react-router-dom";
-import { LogOutAction } from '../api/base';
+import { GetAccessToken, LogOutAction } from '../api/base';
+import { LoginUserApi } from '../api/login/login';
 import { AddtocardGet } from '../api/product/card';
+import { FetchCardData, FetchWishlistData, GetAuthDetail } from '../layout/utils';
 import Log from "../logo.png"
+import {CardData, WishlistData } from './card/card';
 export default function Header(prop){
-    const userAthantication = useSelector(state => state.Reducer1.userAthantication);
+    const userAthantication = GetAuthDetail();
+	const dispatch = useDispatch();
     const userData = useSelector(state => state.Reducer2.data);
-    useEffect(() => {
-        const fetchCardData = async () => {
-          try {
-            const cardData = await AddtocardGet(userAthantication);
-            if (cardData.statusCode == 200) {
-              console.log(cardData.data.results)
-            }
-          } catch (error) {
-            console.error(error.message);
-          }
+    const cardData = useSelector(card => card.CartReducer.cardData);
+    const wishlistData = useSelector(wishlist => wishlist.WishlistReducer.wishlistData);
+    // const [cardData , setCardData] = useState({});
+    console.log(wishlistData);
+    useEffect(async ()=>{
+        const access = GetAccessToken();
+        if(access){
+            console.log(cardData);
+            const user = await LoginUserApi(userAthantication);
         }
-        fetchCardData();
+    })
+    useEffect(async () => {
+        await FetchCardData(dispatch);
+        await FetchWishlistData(dispatch);
     }, []);
     return(
         <header className={prop.headerTheam}>
@@ -61,7 +67,7 @@ export default function Header(prop){
                                             <div className="header-menu">
                                                 <ul>
                                                     <li><Link to="/my_account">My Account</Link></li>
-                                                    <li><a href='#' onClick={()=>LogOutAction()}>Logout</a></li>
+                                                    <li><a href='/' onClick={()=>LogOutAction()}>Logout</a></li>
                                                 </ul>
                                             </div>
                                             </div>
@@ -122,79 +128,13 @@ export default function Header(prop){
                         ""
                     ):(
                         <>
-                            <div className="wishlist">
-                                <a href="#" title="Wishlist">
-                                    <i className="icon-heart-o"></i>
-                                    <span className="wishlist-count">3</span>
-                                </a>
-                            </div>
-
-                            <div className="dropdown cart-dropdown">
-                                <a href="#" className="dropdown-toggle" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-display="static">
-                                    <i className="icon-shopping-cart"></i>
-                                    {/* { <span className="cart-count">{ prop }</span> } */}
-                                    <span className="cart-count">2</span>
-                                </a>
-
-                                <div className="dropdown-menu dropdown-menu-right">
-                                    <div className="dropdown-cart-products">
-                                        <div className="product">
-                                            <div className="product-cart-details">
-                                                <h4 className="product-title">
-                                                    <a href="#">Beige knitted elastic runner shoes</a>
-                                                </h4>
-
-                                                <span className="cart-product-info">
-                                                    <span className="cart-product-qty">1</span>
-                                                    x $84.00
-                                                </span>
-                                            </div>
-
-                                            <figure className="product-image-container">
-                                                <a href="#" className="product-image">
-                                                    <img src="assets/images/products/cart/product-1.jpg" alt="product" />
-                                                </a>
-                                            </figure>
-                                            <a href="#" className="btn-remove" title="Remove Product"><i className="icon-close"></i></a>
-                                        </div>
-
-                                        <div className="product">
-                                            <div className="product-cart-details">
-                                                <h4 className="product-title">
-                                                    <a href="#">Blue utility pinafore denim dress</a>
-                                                </h4>
-
-                                                <span className="cart-product-info">
-                                                    <span className="cart-product-qty">1</span>
-                                                    x $76.00
-                                                </span>
-                                            </div>
-
-                                            <figure className="product-image-container">
-                                                <a href="#" className="product-image">
-                                                    <img src="assets/images/products/cart/product-2.jpg" alt="product" />
-                                                </a>
-                                            </figure>
-                                            <a href="#" className="btn-remove" title="Remove Product"><i className="icon-close"></i></a>
-                                        </div>
-                                    </div>
-
-                                    <div className="dropdown-cart-total">
-                                        <span>Total</span>
-
-                                        <span className="cart-total-price">$160.00</span>
-                                    </div>
-
-                                    <div className="dropdown-cart-action">
-                                        <a href="#" className="btn btn-primary">View Cart</a>
-                                        <a href="#" className="btn btn-outline-primary-2"><span>Checkout</span><i className="icon-long-arrow-right"></i></a>
-                                    </div>
-                                </div>
-                            </div>
+                            <WishlistData wishlistData={wishlistData}/>
+                            {cardData?<CardData cardData={cardData}/>:""}
+                            
                         </>
                     )}
                 </div>
-            </div>
+                </div>
         </header>
     );
 }

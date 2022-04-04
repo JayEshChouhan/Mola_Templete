@@ -6,8 +6,10 @@ export async function LoginApi(data) {
     let AuthStr = result.data.access;
     let refresh = result.data.refresh;
     console.log(AuthStr);
-    SetAccessToken(AuthStr)
-    SetRefreshToken(refresh)
+    if(result.statusCode===200){
+        SetAccessToken(AuthStr)
+        SetRefreshToken(refresh)
+    }
     return result;
 }
 

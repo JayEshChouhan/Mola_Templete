@@ -5,6 +5,9 @@ import Footer from "./footer";
 import { Tab,Nav,Col, Container, Row } from "react-bootstrap";
 
 export default function Myaccount(prop) {
+    const Data = localStorage.getItem("userData")
+    const userData = JSON.parse(Data);
+    console.log(userData);
     return(
         <div className="page-wrapper">
              <Mybreadcrumb />
@@ -39,9 +42,9 @@ export default function Myaccount(prop) {
                                             <Tab.Pane eventKey="dashboard">
                                             <p>
                                                 Hello 
-                                                <span class="font-weight-normal text-dark"> {prop.data.name} </span> 
+                                                <span class="font-weight-normal text-dark"> {userData.name} </span> 
                                                 (not 
-                                                <span class="font-weight-normal text-dark"> {prop.data.name} </span>
+                                                <span class="font-weight-normal text-dark"> {userData.name} </span>
                                                 ? 
                                                 <a href="#"> Log out</a>) 
                                                 <br />

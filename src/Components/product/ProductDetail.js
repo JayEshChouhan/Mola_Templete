@@ -7,11 +7,17 @@ import { Addtocard } from "../../api/product/card";
 import { TailSpin } from  'react-loader-spinner'
 import Mybreadcrumb from "../breadcrumb";
 import Img from "../../layout/img";
-const base_url = 'http://127.0.0.1:8000';
+import { FetchCardData, GetAuthDetail } from "../../layout/utils";
+import { useDispatch, useSelector } from "react-redux";
+const base_url = process.env.REACT_APP_baseUrl;
 
 function ProductDetail(prop) {
+	  const dispatch = useDispatch();
     let productId = useParams();
+    const userAthantication = GetAuthDetail();
     const [productsDetail , setProductsDetail] = useState([]);
+    const cardDataList = useSelector(card => card.CartReducer.cardData);
+    const [quantity , setQuantity] = useState(1);
     const [loading, setLoading] = useState(true);
     useEffect(() => {
         const fetchData = async () =>{
@@ -19,6 +25,7 @@ function ProductDetail(prop) {
           try {
               console.log(productId.productId);
             const ProductDetailmain = await ProductSingleGetApi(`api/products/${productId.productId}`);
+            
             console.log(ProductDetailmain);
             let id = ProductDetailmain.data;
             setProductsDetail(id)
@@ -30,12 +37,25 @@ function ProductDetail(prop) {
         fetchData();
     },[]);
     const AddToCard = async (id) => {
-        const cardData = {
-          "product": id
+      var qyt = parseInt(quantity);
+      console.log(cardDataList);
+      cardDataList.data.map((data)=>{
+        if(data.product_id == id){
+          qyt = data.quantity + qyt;
+          // console.log(data.quantity+1);
+          console.log(typeof qyt,typeof data.quantity);
         }
-        
+      })
+        const cardData = {
+          "product": id,
+          "quantity": qyt
+        }
+        console.log(qyt);
         try {
-          const cardApi = await Addtocard(cardData,true);
+          const cardApi = await Addtocard(cardData,userAthantication);
+          if(cardApi.statusCode===201||cardApi.statusCode===200){
+            FetchCardData(dispatch);
+          }
           console.log(cardApi);
         } catch (error) {
           console.error(error.message);
@@ -102,7 +122,15 @@ function ProductDetail(prop) {
                                     <div className="product-details-action">
                                         <div className="details-action-col">
                                             <div className="product-details-quantity">
-                                                <input type="number" min="1" max="10" step="1" />
+                                                <input type="number" min="1" max="10" step="1" onChange={(e)=>{
+                                                    
+                                                    if(e.target.value>10){
+                                                      alert("you can't add value more then 10");
+                                                      e.target.value =1;
+                                                    }else{
+                                                      setQuantity(e.target.value);
+                                                    }
+                                                  }}/>
                                             </div>
                                             <a 
                                                 href="javascript:;" 

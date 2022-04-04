@@ -19,7 +19,6 @@ export default function Login(prop){
 	const [password , setPassword]= useState("");
 	const [confirm_password,setConfirmPassword]= useState("");
 	const dispatch = useDispatch();
-	const userAthantication = useSelector(state => state.Reducer1.userAthantication);
 	async function login() {
 		let item={
 			email: email,
@@ -30,11 +29,11 @@ export default function Login(prop){
 			toast.success("Login Successfully");
 			// var auth = login.status;
 			// console.log(auth);
-			const userData = await LoginUserApi();
+			const userData = await LoginUserApi(login.status);
 			console.log(userData);
 			dispatch({type: "ATHANTICATION" ,payload: {no:login.status}});
 			dispatch({type: "LOGINUSERDATA" ,payload: {data:userData.data}});
-			window.history.pushState({}, null, "/my_account");
+			window.location.href = "/my_account";
 		}else{
 			if(!login.data.status){
 				if (login.data.email){

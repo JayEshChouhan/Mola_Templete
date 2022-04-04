@@ -8770,6 +8770,7 @@ p {
 }
 
 .product.product-10 .product-body .btn-wishlist:hover::before,
+.product.product-10 .product-body .btn-wishlist.active::before,
 .product.product-10 .product-body .btn-wishlist:focus::before {
 	content: '\f233'
 }

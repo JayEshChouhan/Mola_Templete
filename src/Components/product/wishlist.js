@@ -20,7 +20,7 @@ export default function Wishlist(prop){
         } catch (error) {
           console.error(error.message);
         }
-      }
+    }
     const DeletetoWishlistmain = async (id) => {
         try {
           const removewishlistApi = await DeletetoWishlist(id,userAthantication);
@@ -33,12 +33,7 @@ export default function Wishlist(prop){
     }
     return(
         <>
-            {
-                WishlistDataList.map(data=>{
-                    return(
-                        <>
-                            {data.product === prop.id?
-                                <a 
+            {WishlistDataList.some(data => data.product === prop.id)?<a 
                                     href="javascript:;" 
                                     className="btn-product-icon btn-wishlist active"
                                     onClick={(event)=> 
@@ -52,8 +47,7 @@ export default function Wishlist(prop){
                                     }
                                 >
                                   <span>Remove to Wishlist</span>
-                                </a>:
-                                <a 
+                                </a>:<a 
                                     href="javascript:;" 
                                     className="btn-product-icon btn-wishlist"
                                     onClick={(event)=> 
@@ -67,12 +61,7 @@ export default function Wishlist(prop){
                                     }
                                 >
                                     <span>Add to Wishlist</span>
-                                </a>
-                            }
-                        </>
-                    )
-                })
-            }
+                                </a>}
         </>
     );
 }

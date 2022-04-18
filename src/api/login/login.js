@@ -15,9 +15,6 @@ export async function LoginApi(data) {
 
 export async function LoginUserApi(auth) {
     const res = await runGetApi("api/user/", {} , auth);
-    console.log(auth);
-    const userData = JSON.stringify(res.data)
-    localStorage.setItem("userData", userData);
     return res;
 }
 

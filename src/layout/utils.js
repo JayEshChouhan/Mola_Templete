@@ -1,5 +1,8 @@
+import { useDispatch } from "react-redux";
 import { GetAccessToken, GetRefreshToken } from "../api/base";
+import { LoginUserApi } from "../api/login/login";
 import { AddtocardGet } from "../api/product/card";
+import { ProductGetApi } from "../api/product/product";
 import { AddToWishlistGetApi } from "../api/product/wishlist";
 
 const userAthantication = GetAuthDetail();
@@ -13,7 +16,14 @@ export function GetAuthDetail(){
         return false;
     }
 }
-
+export async function GetProductsData(dispatch){
+  const ProductDetailmain = await ProductGetApi();
+  dispatch({type: "PRODUCTSDATA" ,payload: {productsData:ProductDetailmain.data.results}});
+}
+export async function GetUseData(auth,dispatch){
+  const userData = await LoginUserApi(auth);
+  dispatch({type: "LOGINUSERDATA" ,payload: {data:userData.data}});
+}
 export const FetchCardData = async (dispatch) => {
   try {
     const cardDataApi = await AddtocardGet(userAthantication);

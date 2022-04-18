@@ -1,27 +1,27 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { Link } from "react-router-dom";
 import { AddtocardGet, DeletetocardGet } from "../../api/product/card";
 import { FetchCardData, GetAuthDetail } from "../../layout/utils";
-
+// * header shop commponent
 export function CardData(prop){
     const dispatch = useDispatch();
     const auth = GetAuthDetail();
     const card = prop.cardData;
     const cardData = prop.cardData.data? prop.cardData.data:[];
-    console.log(cardData)
     const cardDataL = card.data ? card.data.length:0;
-    async function deleteCard(id){
-        const deleteApi = await DeletetocardGet(`api/cart/${id}`,auth);
-        console.log(deleteApi);
-        if(deleteApi.status){
-            console.log("working");
-            FetchCardData(dispatch);
-        }
-    }
+    // const deleteCard = async (id)=>{
+    //     const deleteApi = await DeletetocardGet(`api/cart/${id}`,auth);
+    //     console.log(deleteApi);
+    //     if(deleteApi.status){
+    //         console.log("working");
+    //         FetchCardData(dispatch);
+    //     }
+    // }
     return(
         <>
             <div className="dropdown cart-dropdown">
-                                <a href="#" className="dropdown-toggle" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-display="static">
+                                <Link to="/card" className="dropdown-toggle" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-display="static">
                                     <i className="icon-shopping-cart"></i>
                                     {/* { <span className="cart-count">{ prop }</span> } */}
                                     {(cardData)? 
@@ -31,7 +31,7 @@ export function CardData(prop){
                                     }
                                     
                                     
-                                </a>
+                                </Link>
                                 {cardDataL<1?'':<div className="dropdown-menu dropdown-menu-right">
                                     <div className="dropdown-cart-products">
                                         {cardData?
@@ -54,7 +54,17 @@ export function CardData(prop){
                                                                 <img src={process.env.REACT_APP_baseUrl+card.product.images.image.image} alt="product" />
                                                             </a>
                                                         </figure>
-                                                        <button className="btn-remove" onClick={()=>deleteCard(card.product.id)} title="Remove Product"><i className="icon-close"></i></button>
+                                                        <button 
+                                                            className="btn-remove" 
+                                                            onClick={ async ()=>{
+                                                                const deleteApi = await DeletetocardGet(`api/cart/${card.product.id}`,auth);
+                                                                if(deleteApi.status){
+                                                                    FetchCardData(dispatch);
+                                                                }}
+                                                            } 
+                                                            title="Remove Product">
+                                                                <i className="icon-close"></i>
+                                                        </button>
                                                     </div>
                                                 )
                                             }):''
@@ -80,7 +90,7 @@ export function CardData(prop){
                                         {/* <span className="cart-total-price">${prop.cardData.totalProductPrice}</span> */}
                                     </div>
                                     <div className="dropdown-cart-action">
-                                        <a href="#" className="btn btn-primary">View Cart</a>
+                                        <Link to="/card" className="btn btn-primary">View Cart</Link>
                                         <a href="#" className="btn btn-outline-primary-2"><span>Checkout</span><i className="icon-long-arrow-right"></i></a>
                                     </div>
                                 </div>}

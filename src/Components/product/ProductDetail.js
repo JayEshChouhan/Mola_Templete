@@ -19,6 +19,7 @@ function ProductDetail(prop) {
     const cardDataList = useSelector(card => card.CartReducer.cardData);
     const [quantity , setQuantity] = useState(1);
     const [loading, setLoading] = useState(true);
+    const [cardLoading, setcardLoading] = useState(false);
     useEffect(() => {
         const fetchData = async () =>{
           setLoading(true);
@@ -37,6 +38,7 @@ function ProductDetail(prop) {
         fetchData();
     },[]);
     const AddToCard = async (id) => {
+      setcardLoading(true)
       var qyt = parseInt(quantity);
       console.log(cardDataList);
       cardDataList.data.map((data)=>{
@@ -55,10 +57,12 @@ function ProductDetail(prop) {
           const cardApi = await Addtocard(cardData,userAthantication);
           if(cardApi.statusCode===201||cardApi.statusCode===200){
             FetchCardData(dispatch);
+            setcardLoading(false)
           }
           console.log(cardApi);
         } catch (error) {
           console.error(error.message);
+          setcardLoading(false)
         }
     }
     return (
@@ -143,7 +147,13 @@ function ProductDetail(prop) {
                                                     }
                                                 }
                                                 >
-                                                <span>add to cart</span>
+                                                {cardLoading? 
+                                                  <span className="lodding">
+                                                    <TailSpin color="#000000" height={20} width={20} />
+                                                  </span>
+                                                  :
+                                                  <span>add to cart</span>
+                                                }
                                             </a>
                                         </div>
                                         <div className="details-action-wrapper">

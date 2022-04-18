@@ -9,6 +9,7 @@ import Header from "./header";
 import Footer from "./footer";
 import Mybreadcrumb  from "./breadcrumb";
 import { LoginApi, LoginUserApi, SinginApi } from "../api/login/login";
+import { GetUseData } from "../layout/utils";
 var sectionStyle = {
 	backgroundImage: "url(images/login-bg.jpg)"
   };
@@ -29,10 +30,9 @@ export default function Login(prop){
 			toast.success("Login Successfully");
 			// var auth = login.status;
 			// console.log(auth);
-			const userData = await LoginUserApi(login.status);
-			console.log(userData);
+			
+			const userData = await GetUseData(login.status,dispatch);
 			dispatch({type: "ATHANTICATION" ,payload: {no:login.status}});
-			dispatch({type: "LOGINUSERDATA" ,payload: {data:userData.data}});
 			window.location.href = "/my_account";
 		}else{
 			if(!login.data.status){

@@ -4,12 +4,23 @@ import { faCheckSquare, faCoffee , faRupeeSign} from '@fortawesome/fontawesome-f
 
 // fontawesome.library.add(faCheckSquare, faCoffee);
 
-const url = process.env.REACT_APP_PUBLIC_URL
 
 export default function Img(props){
+    const url = process.env.REACT_APP_PUBLIC_URL
     return(
         <>
             <img src={url + props.src} alt={props.alt} className={props.className}/>
+            {/* <FontAwesomeIcon icon="check-square" pull="right" />
+            <FontAwesomeIcon icon={faCoffee} />
+            <FontAwesomeIcon icon="rupee-sign" /> */}
+        </>
+    );
+}
+export function Img2(props){
+    const url2 = process.env.REACT_APP_baseUrl
+    return(
+        <>
+            <img src={url2 + props.src} alt={props.alt} className={props.className}/>
             {/* <FontAwesomeIcon icon="check-square" pull="right" />
             <FontAwesomeIcon icon={faCoffee} />
             <FontAwesomeIcon icon="rupee-sign" /> */}

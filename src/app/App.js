@@ -10,6 +10,7 @@ import { Provider } from 'react-redux';
 import Store from '../redux/store';
 import Header from '../Components/header';
 import Footer from '../Components/footer';
+import Card from '../Components/shop/card';
 // import axios from 'axios';
 function App(props) {
   return (
@@ -24,8 +25,10 @@ function App(props) {
           <Route exact path="/pages" element={<Home />} />
           <Route exact path="/blog" element={<Home />} />
           <Route exact path="/elements" element={<Home />} />
-          <Route path="/my_account" element={ <Myaccount/>} />
           <Route path="/login" element={ <Login />} />
+          <Route path="/my_account" element={ <Myaccount/>} />
+          <Route path='/card' element={<Card />} />
+          <Route path='/wishlist' element={<Card />} />
         </Routes>
         <Footer />
       </Router>

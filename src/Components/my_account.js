@@ -1,12 +1,21 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Header from "./header";
 import Mybreadcrumb from "./breadcrumb";
 import Footer from "./footer";
 import { Tab,Nav,Col, Container, Row } from "react-bootstrap";
+import { useNavigate } from "react-router-dom";
+import { GetAuthDetail } from "../layout/utils";
+import { useSelector } from "react-redux";
 
 export default function Myaccount(prop) {
-    const Data = localStorage.getItem("userData")
-    const userData = JSON.parse(Data);
+    const userData = useSelector(state => state.Reducer2.data);
+    const navigate = useNavigate();
+    const userAthantication = GetAuthDetail();
+    useEffect(()=>{
+        if(!userAthantication){
+            navigate("/login")
+        }
+    })
     console.log(userData);
     return(
         <div className="page-wrapper">

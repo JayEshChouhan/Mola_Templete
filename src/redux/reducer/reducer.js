@@ -5,13 +5,14 @@ const initialState = {
 
 const userData = {
     data: {
-        email: "jayesh.chouhan@cubexo.com",
-        id: 3,
-        mobile_number: 9826684906,
-        name: "jay",
+        email: "",
+        id: null,
+        mobile_number: null,
+        name: "",
         profile_image: null
     }
 }
+ const initialProductsData = {productsData: []};
  const initialcardData = {cardData: []};
  const initialWishlistData = {wishlistData: []};
 
@@ -30,6 +31,14 @@ export function Reducer2(state = userData, action){
     switch(action.type){
         case "LOGINUSERDATA": 
             return {...state, data: action.payload.data};
+        default:
+            return state;
+    }
+}
+export function ProductsReducer(state = initialProductsData, action){
+    switch(action.type){
+        case "PRODUCTSDATA": 
+            return {...state, productsData: action.payload.productsData};
         default:
             return state;
     }

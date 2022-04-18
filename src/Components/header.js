@@ -4,9 +4,9 @@ import { Link,NavLink } from "react-router-dom";
 import { GetAccessToken, LogOutAction } from '../api/base';
 import { LoginUserApi } from '../api/login/login';
 import { AddtocardGet } from '../api/product/card';
-import { FetchCardData, FetchWishlistData, GetAuthDetail } from '../layout/utils';
+import { FetchCardData, FetchWishlistData, GetAuthDetail, GetUseData } from '../layout/utils';
 import Log from "../logo.png"
-import {CardData, WishlistData } from './card/card';
+import {CardData, WishlistData } from './shop/shop';
 export default function Header(prop){
     const userAthantication = GetAuthDetail();
 	const dispatch = useDispatch();
@@ -14,18 +14,30 @@ export default function Header(prop){
     const cardData = useSelector(card => card.CartReducer.cardData);
     const wishlistData = useSelector(wishlist => wishlist.WishlistReducer.wishlistData);
     // const [cardData , setCardData] = useState({});
-    console.log(wishlistData);
+    // console.log(userData);
     useEffect(async ()=>{
         const access = GetAccessToken();
         if(access){
-            console.log(cardData);
-            const user = await LoginUserApi(userAthantication);
+            const userDataGet = await GetUseData(userAthantication,dispatch);
         }
-    })
+        
+    },[])
     useEffect(async () => {
         await FetchCardData(dispatch);
         await FetchWishlistData(dispatch);
     }, []);
+    useEffect(() => {
+        window.addEventListener('scroll', isSticky);
+        return () => {
+            window.removeEventListener('scroll', isSticky);
+        };
+    });
+    const isSticky = (e) => {
+        const header = document.querySelector('.header');
+        const body = document.querySelector('.page-wrapper');
+        const scrollTop = window.scrollY;
+        scrollTop >= 132.5 ? (header.classList.add('is-sticky'))(body.classList.add('is-sticky'))  : (header.classList.remove('is-sticky'))(body.classList.remove('is-sticky'));
+    };
     return(
         <header className={prop.headerTheam}>
             <div className="header-top">

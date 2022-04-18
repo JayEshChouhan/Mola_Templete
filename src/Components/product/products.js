@@ -4,7 +4,7 @@ import axios from "axios";
 import { TailSpin } from 'react-loader-spinner'
 import { ProductGetApi } from "../../api/product/product";
 import { Addtocard, AddtocardGet } from "../../api/product/card";
-import { FetchCardData, FetchWishlistData, GetAuthDetail } from "../../layout/utils";
+import { FetchCardData, FetchWishlistData, GetAuthDetail, GetProductsData } from "../../layout/utils";
 import { useDispatch, useSelector } from "react-redux";
 import { AddToWishlistApi, DeletetoWishlist } from "../../api/product/wishlist";
 import Wishlist from "./wishlist";
@@ -15,20 +15,20 @@ export default function Products(prop) {
 	const dispatch = useDispatch();
   const navigate = useNavigate();
   const userAthantication = GetAuthDetail();
-  const [productsData, setProductsData] = useState([]);
+  const productsData = useSelector(productsData => productsData.ProductsReducer.productsData);
   const [loading, setLoading] = useState(true);
+  const [cardLoading, setcardLoading] = useState(false);
   const cardDataList = useSelector(card => card.CartReducer.cardData);
   const WishlistDataList = useSelector(wishlist => wishlist.WishlistReducer.wishlistData);
-  console.log(WishlistDataList);
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
       try {
-        const ProductDetailmain = await ProductGetApi();
-        if (ProductDetailmain.statusCode == 200) {
-          setProductsData(ProductDetailmain.data.results);
-          console.log(productsData);
-        }
+        const ProductDetailmain = await GetProductsData(dispatch);
+        // if (ProductDetailmain.statusCode == 200) {
+        //   setProductsData(ProductDetailmain.data.results);
+        //   console.log(productsData);
+        // }
       } catch (error) {
         console.error(error.message);
       }
@@ -37,6 +37,7 @@ export default function Products(prop) {
     fetchData();
   }, []);
   const AddToCard = async (id) => {
+    setcardLoading(true)
     var qyt = 1;
     console.log(cardDataList);
     cardDataList.data.map((data)=>{
@@ -54,9 +55,11 @@ export default function Products(prop) {
       const cardApi = await Addtocard(cardData,userAthantication);
       if(cardApi.statusCode===201||cardApi.statusCode===200){
         FetchCardData(dispatch);
+        setcardLoading(false)
       }
     } catch (error) {
       console.error(error.message);
+      setcardLoading(false)
     }
   }
   const AddToWishlist = async (id) => {
@@ -77,7 +80,7 @@ export default function Products(prop) {
     <div className="row">
       {loading && <div className="d-flex flex-wrap justify-content-center"><TailSpin color="#00BFFF" height={80} width={80} /><p className="w-100 text-center mt-2">Loading Products....</p></div>}
       {!loading && (
-        productsData.map(product => {
+        productsData.map((product, i) => {
           return (
             <div className={prop.grid}>
               <div key={product.id} className="product product-10 text-center">
@@ -103,8 +106,14 @@ export default function Products(prop) {
                         }
                       }
                       >
-                        <span>add to cart</span>
-                    </a>
+                        {cardLoading? 
+                          <span className="lodding">
+                            <TailSpin color="#000000" height={20} width={20} />
+                          </span>
+                          :
+                          <span>add to cart</span>
+                        }
+                      </a>
                     {console.log(WishlistDataList)}
                     {WishlistDataList.length>0?
                       <Wishlist id={product.id}/>:<a 
